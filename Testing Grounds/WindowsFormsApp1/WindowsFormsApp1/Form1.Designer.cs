@@ -34,7 +34,7 @@
 			this.DiagramsDropDownBox = new System.Windows.Forms.ToolStripDropDownButton();
 			this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
 			this.arrayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.pointerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.insert_Line = new System.Windows.Forms.ToolStripMenuItem();
 			this.insert_Rectangle = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
@@ -80,7 +80,7 @@
 			this.DiagramsDropDownBox.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripTextBox1,
             this.arrayToolStripMenuItem,
-            this.pointerToolStripMenuItem,
+            this.insert_Line,
             this.insert_Rectangle});
 			this.DiagramsDropDownBox.Image = ((System.Drawing.Image)(resources.GetObject("DiagramsDropDownBox.Image")));
 			this.DiagramsDropDownBox.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -98,20 +98,21 @@
 			// arrayToolStripMenuItem
 			// 
 			this.arrayToolStripMenuItem.Name = "arrayToolStripMenuItem";
-			this.arrayToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+			this.arrayToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.arrayToolStripMenuItem.Text = "Array";
 			this.arrayToolStripMenuItem.Click += new System.EventHandler(this.arrayToolStripMenuItem_Click);
 			// 
-			// pointerToolStripMenuItem
+			// insert_Line
 			// 
-			this.pointerToolStripMenuItem.Name = "pointerToolStripMenuItem";
-			this.pointerToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-			this.pointerToolStripMenuItem.Text = "Pointer";
+			this.insert_Line.Name = "insert_Line";
+			this.insert_Line.Size = new System.Drawing.Size(180, 22);
+			this.insert_Line.Text = "Line";
+			this.insert_Line.Click += new System.EventHandler(this.insert_Line_Click);
 			// 
 			// insert_Rectangle
 			// 
 			this.insert_Rectangle.Name = "insert_Rectangle";
-			this.insert_Rectangle.Size = new System.Drawing.Size(160, 22);
+			this.insert_Rectangle.Size = new System.Drawing.Size(180, 22);
 			this.insert_Rectangle.Text = "Rectangle";
 			this.insert_Rectangle.Click += new System.EventHandler(this.insert_Rectangle_Click);
 			// 
@@ -216,7 +217,7 @@
         private System.Windows.Forms.ToolStripDropDownButton DiagramsDropDownBox;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
         private System.Windows.Forms.ToolStripMenuItem arrayToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pointerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem insert_Line;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;

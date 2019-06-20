@@ -14,8 +14,6 @@ namespace WindowsFormsApp1
 {
     public partial class Form1 : Form
     {
-        PaintEventArgs PEA;
-
         public Form1()
         {
             InitializeComponent();
@@ -51,41 +49,177 @@ namespace WindowsFormsApp1
 
 			Point p = new Point(100, 100);
 
-			Box box = new Box(p);
+			Box box = new Box(p, ref drawingSurface1);
 
 			drawingSurface1.Shapes.Add(box);
 
-			box.Draw(drawingSurface1.CreateGraphics(), drawingSurface1);
+			box.Draw(drawingSurface1.CreateGraphics());
         }
 
-        private void paint_Rectangle(Rectangle box)
-        {
-            Pen pen = new Pen(Color.Black, 2);
 
-            
+		private void insert_Line_Click(object sender, EventArgs e)
+		{
+			Point p1 = new Point(100, 150);
+			Point p2 = new Point(100, 300);
 
-            PEA.Graphics.DrawRectangle(pen, box);
-        }
+			Line line = new Line(p1, p2, ref drawingSurface1);
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            PEA = e;
-			Rectangle rect = new Rectangle(0, 0, 200, 100);
-            paint_Rectangle(rect);
-        }
-    }
+			drawingSurface1.Shapes.Add(line);
 
-    public interface Item
+			line.Draw(drawingSurface1.CreateGraphics());
+		}
+
+		public static int distance(Point p1, Point p2)
+		{
+			int a = p1.X - p2.X;
+			int b = p1.Y - p2.Y;
+
+			double cSquared = Math.Pow(a, 2) + Math.Pow(b, 2);
+			int c = (int) Math.Truncate(Math.Sqrt(cSquared));
+
+			return c;
+		}
+
+	}
+
+	public interface Item
     {
         GraphicsPath getPath();
         bool HitTest(Point p);
-        void Draw(Graphics g, DrawingSurface d);
+        void Draw(Graphics g);
         void Move(Point p);
     }
 
+	public class Line : Item
+	{
+		public Line(Point a, Point b, ref DrawingSurface d)
+		{
+			p1 = a;
+			p2 = b;
+
+			thickness = 10;
+			color = Color.Black;
+
+			surface = d;
+			sensitivity = 1.5F;     //The F is used to tell c# that 1.5 is a float, rather than a double. because strying to store it in a Float variable
+									//isn't enough of a hint.
+		}
+
+		public GraphicsPath getPath()
+		{
+			var path = new GraphicsPath();
+
+			path.AddLine(p1, p2);
+
+			return path;
+		}
+
+		public bool HitTest(Point p)
+		{
+			var result = false;
+			using (var path = getPath())
+			{
+				using (var pen = new Pen(color, thickness * sensitivity))
+				{
+					result = path.IsOutlineVisible(p, pen);
+				}
+			}
+
+			if(result == true)
+			{
+				//EndPointHitTest(p);
+				
+				
+				if (!EndPointHitTest(p))
+				{
+					movingEnd = Point.Empty;
+				}
+				
+			}
+			return result;
+		}
+
+		private bool EndPointHitTest(Point p)
+		{
+			if (Form1.distance(p, p1) <= (thickness * sensitivity))
+			{
+				movingEnd = p1;
+				return true;
+			}
+			else if(Form1.distance(p, p2) <= (thickness * sensitivity))
+			{
+				movingEnd = p2;
+				return true;
+			}
+
+			return false;
+		}
+
+		public void Draw(Graphics g)
+		{
+			using (var path = getPath())
+			{
+				using (var pen = new Pen(color, thickness))
+				{
+					g.DrawPath(pen, path);
+				}
+			}
+		}
+		public void Move(Point p)
+		{
+			//p1 = new Point(p1.X + p.X, p1.Y + p.Y);
+
+
+			/*
+			if (surface.moving == true)
+			{
+			*/
+			
+				if (movingEnd.Equals(p1))
+				{
+					p1 = new Point(p1.X + p.X, p1.Y + p.Y);
+					movingEnd = p1;
+				}
+				else if (movingEnd.Equals(p2))
+				{
+					p2 = new Point(p2.X + p.X, p2.Y + p.Y);
+					movingEnd = p2;
+				}
+				else
+				{
+					p1 = new Point(p1.X + p.X, p1.Y + p.Y);
+					p2 = new Point(p2.X + p.X, p2.Y + p.Y);
+				}
+				//movingEnd.X = movingEnd.X + p.X;
+				//movingEnd.Y = movingEnd.Y + p.Y;
+		
+			/*
+				}
+
+				else //This will be necessary if we ever allow dragging the background to move all shapes around
+				{
+					p1 = new Point(p1.X + p.X, p1.Y + p.Y);
+					p2 = new Point(p2.X + p.X, p2.Y + p.Y);
+				}
+			*/
+		}
+
+		public Point p1 { get; set; }
+		public Point p2 { get; set; }
+
+		public int thickness { get; set; }
+		public float sensitivity { get; set; }  //how generous the hit detection is (pretend the line is (thickness * sensitivity) pixels thick)
+														
+		public Color color { get; set; }
+		public Point movingEnd { get; set; }
+
+		private DrawingSurface surface;
+		
+	}
+
     public class Box : Item
     {
-        public Box(Point p)
+        public Box(Point p, ref DrawingSurface d)
         {
             height = 50;
             width = 100;
@@ -94,7 +228,8 @@ namespace WindowsFormsApp1
 			TLCorner = p;
 			text = new TextBox();
 			text.Width = 50;
-			
+
+			surface = d;
         }
         public int height { get; set; }
         public int width { get; set; }
@@ -102,6 +237,8 @@ namespace WindowsFormsApp1
         public Color color { get; set; }
         public int thickness { get; set; } //thickness of border lines
 		public TextBox text;
+
+		private DrawingSurface surface;
 
 		public GraphicsPath getPath()
         {
@@ -128,7 +265,7 @@ namespace WindowsFormsApp1
             return result;
         }
 
-        public void Draw(Graphics g, DrawingSurface d)
+        public void Draw(Graphics g)
         {
            // using (var path = getPath())
            // {
@@ -138,7 +275,8 @@ namespace WindowsFormsApp1
 				int x = TLCorner.X + (width / 2) - (text.Width / 2);
 				int y = TLCorner.Y + (height / 2) - (text.Height / 2);
 
-				d.Controls.Add(text);
+				surface.Controls.Add(text);
+				
 
 				//int x = 0;
 				//int y = 0;
@@ -167,12 +305,13 @@ namespace WindowsFormsApp1
     {
         public List<Item> Shapes { get; private set; }
         Item selectedShape;
-        bool moving;
+        public bool moving { get; private set; }
 		Point previousPoint = Point.Empty;
 
 		public DrawingSurface(){
 			DoubleBuffered = true;
 			Shapes = new List<Item>();
+			moving = false;
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)
@@ -188,7 +327,8 @@ namespace WindowsFormsApp1
 
 			if(selectedShape != null)
 			{
-				moving = true; previousPoint = e.Location;
+				moving = true;
+				previousPoint = e.Location;
 			}
 
 			base.OnMouseDown(e);
@@ -224,7 +364,7 @@ namespace WindowsFormsApp1
 
 			foreach(var shape in Shapes)
 			{
-				shape.Draw(e.Graphics, this);
+				shape.Draw(e.Graphics);
 			}
 
 			base.OnPaint(e);
