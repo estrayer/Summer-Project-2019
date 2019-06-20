@@ -98,20 +98,20 @@
 			// arrayToolStripMenuItem
 			// 
 			this.arrayToolStripMenuItem.Name = "arrayToolStripMenuItem";
-			this.arrayToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.arrayToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.arrayToolStripMenuItem.Text = "Array";
 			this.arrayToolStripMenuItem.Click += new System.EventHandler(this.arrayToolStripMenuItem_Click);
 			// 
 			// pointerToolStripMenuItem
 			// 
 			this.pointerToolStripMenuItem.Name = "pointerToolStripMenuItem";
-			this.pointerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.pointerToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.pointerToolStripMenuItem.Text = "Pointer";
 			// 
 			// insert_Rectangle
 			// 
 			this.insert_Rectangle.Name = "insert_Rectangle";
-			this.insert_Rectangle.Size = new System.Drawing.Size(180, 22);
+			this.insert_Rectangle.Size = new System.Drawing.Size(160, 22);
 			this.insert_Rectangle.Text = "Rectangle";
 			this.insert_Rectangle.Click += new System.EventHandler(this.insert_Rectangle_Click);
 			// 
@@ -141,13 +141,13 @@
 			// classToolStripMenuItem
 			// 
 			this.classToolStripMenuItem.Name = "classToolStripMenuItem";
-			this.classToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.classToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
 			this.classToolStripMenuItem.Text = "Class";
 			// 
 			// relationshipToolStripMenuItem
 			// 
 			this.relationshipToolStripMenuItem.Name = "relationshipToolStripMenuItem";
-			this.relationshipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.relationshipToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
 			this.relationshipToolStripMenuItem.Text = "Relationship";
 			// 
 			// toolStripSeparator2
@@ -166,7 +166,7 @@
 			// 
 			// drawingSurface1
 			// 
-			this.drawingSurface1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+			this.drawingSurface1.BackColor = System.Drawing.SystemColors.HotTrack;
 			this.drawingSurface1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.drawingSurface1.Location = new System.Drawing.Point(0, 25);
 			this.drawingSurface1.Name = "drawingSurface1";

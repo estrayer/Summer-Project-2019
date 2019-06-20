@@ -55,7 +55,7 @@ namespace WindowsFormsApp1
 
 			drawingSurface1.Shapes.Add(box);
 
-			box.Draw(drawingSurface1.CreateGraphics());
+			box.Draw(drawingSurface1.CreateGraphics(), drawingSurface1);
         }
 
         private void paint_Rectangle(Rectangle box)
@@ -79,7 +79,7 @@ namespace WindowsFormsApp1
     {
         GraphicsPath getPath();
         bool HitTest(Point p);
-        void Draw(Graphics g);
+        void Draw(Graphics g, DrawingSurface d);
         void Move(Point p);
     }
 
@@ -92,14 +92,18 @@ namespace WindowsFormsApp1
             color = Color.Black;
             thickness = 5;
 			TLCorner = p;
+			text = new TextBox();
+			text.Width = 50;
+			
         }
         public int height { get; set; }
         public int width { get; set; }
         public Point TLCorner { get; set; } //Top Left Corner of box
         public Color color { get; set; }
         public int thickness { get; set; } //thickness of border lines
+		public TextBox text;
 
-        public GraphicsPath getPath()
+		public GraphicsPath getPath()
         {
             var path = new GraphicsPath();
 
@@ -124,21 +128,39 @@ namespace WindowsFormsApp1
             return result;
         }
 
-        public void Draw(Graphics g)
+        public void Draw(Graphics g, DrawingSurface d)
         {
            // using (var path = getPath())
            // {
                 using (var pen = new Pen(color, thickness))
                 {
                     g.DrawRectangle(pen, new Rectangle(TLCorner.X, TLCorner.Y, width, height));
-                }
+				int x = TLCorner.X + (width / 2) - (text.Width / 2);
+				int y = TLCorner.Y + (height / 2) - (text.Height / 2);
+
+				d.Controls.Add(text);
+
+				//int x = 0;
+				//int y = 0;
+				text.Location = new Point(x, y);
+				text.Show();
+				//text.Visible = true;
+				//text.BringToFront();
+
+
+			}
            // }
         }
 
         public void Move(Point p)
         {
             TLCorner = new Point(TLCorner.X + p.X, TLCorner.Y + p.Y);
-        }
+
+			int x = TLCorner.X + (width / 2) - (text.Width / 2);
+			int y = TLCorner.Y + (height / 2) - (text.Height / 2);
+
+			text.Location = new Point(x, y);
+		}
     }
 
     public class DrawingSurface : Control
@@ -202,7 +224,7 @@ namespace WindowsFormsApp1
 
 			foreach(var shape in Shapes)
 			{
-				shape.Draw(e.Graphics);
+				shape.Draw(e.Graphics, this);
 			}
 
 			base.OnPaint(e);
