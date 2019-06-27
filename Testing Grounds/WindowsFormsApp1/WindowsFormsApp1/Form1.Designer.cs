@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
@@ -45,10 +46,15 @@
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-			this.drawingSurface1 = new WindowsFormsApp1.DrawingSurface();
+			this.boxContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.freeze = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.boxSpecificOptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
 			this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
+			this.drawingSurface1 = new WindowsFormsApp1.DrawingSurface();
 			this.toolStrip1.SuspendLayout();
+			this.boxContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// toolStrip1
@@ -98,21 +104,21 @@
 			// arrayToolStripMenuItem
 			// 
 			this.arrayToolStripMenuItem.Name = "arrayToolStripMenuItem";
-			this.arrayToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.arrayToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.arrayToolStripMenuItem.Text = "Array";
 			this.arrayToolStripMenuItem.Click += new System.EventHandler(this.arrayToolStripMenuItem_Click);
 			// 
 			// insert_Line
 			// 
 			this.insert_Line.Name = "insert_Line";
-			this.insert_Line.Size = new System.Drawing.Size(180, 22);
+			this.insert_Line.Size = new System.Drawing.Size(160, 22);
 			this.insert_Line.Text = "Line";
 			this.insert_Line.Click += new System.EventHandler(this.insert_Line_Click);
 			// 
 			// insert_Rectangle
 			// 
 			this.insert_Rectangle.Name = "insert_Rectangle";
-			this.insert_Rectangle.Size = new System.Drawing.Size(180, 22);
+			this.insert_Rectangle.Size = new System.Drawing.Size(160, 22);
 			this.insert_Rectangle.Text = "Rectangle";
 			this.insert_Rectangle.Click += new System.EventHandler(this.insert_Rectangle_Click);
 			// 
@@ -165,15 +171,32 @@
 			this.toolStripButton1.Size = new System.Drawing.Size(35, 22);
 			this.toolStripButton1.Text = "Save";
 			// 
-			// drawingSurface1
+			// boxContextMenu
 			// 
-			this.drawingSurface1.BackColor = System.Drawing.SystemColors.HotTrack;
-			this.drawingSurface1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.drawingSurface1.Location = new System.Drawing.Point(0, 25);
-			this.drawingSurface1.Name = "drawingSurface1";
-			this.drawingSurface1.Size = new System.Drawing.Size(1429, 448);
-			this.drawingSurface1.TabIndex = 2;
-			this.drawingSurface1.Text = "drawingSurface1";
+			this.boxContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.freeze,
+            this.toolStripMenuItem2,
+            this.boxSpecificOptionToolStripMenuItem});
+			this.boxContextMenu.Name = "boxContextMenu";
+			this.boxContextMenu.Size = new System.Drawing.Size(178, 70);
+			// 
+			// freeze
+			// 
+			this.freeze.Name = "freeze";
+			this.freeze.Size = new System.Drawing.Size(177, 22);
+			this.freeze.Text = "Freeze";
+			// 
+			// toolStripMenuItem2
+			// 
+			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 22);
+			this.toolStripMenuItem2.Text = "Connect";
+			// 
+			// boxSpecificOptionToolStripMenuItem
+			// 
+			this.boxSpecificOptionToolStripMenuItem.Name = "boxSpecificOptionToolStripMenuItem";
+			this.boxSpecificOptionToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			this.boxSpecificOptionToolStripMenuItem.Text = "Box Specific Option";
 			// 
 			// hScrollBar1
 			// 
@@ -191,20 +214,32 @@
 			this.vScrollBar1.Size = new System.Drawing.Size(17, 427);
 			this.vScrollBar1.TabIndex = 4;
 			// 
+			// drawingSurface1
+			// 
+			this.drawingSurface1.BackColor = System.Drawing.SystemColors.HotTrack;
+			this.drawingSurface1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.drawingSurface1.Location = new System.Drawing.Point(0, 25);
+			this.drawingSurface1.Name = "drawingSurface1";
+			this.drawingSurface1.Size = new System.Drawing.Size(1412, 427);
+			this.drawingSurface1.TabIndex = 2;
+			this.drawingSurface1.Text = "drawingSurface1";
+			this.drawingSurface1.Click += new System.EventHandler(this.drawingSurface1_Click);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1429, 473);
+			this.Controls.Add(this.drawingSurface1);
 			this.Controls.Add(this.vScrollBar1);
 			this.Controls.Add(this.hScrollBar1);
-			this.Controls.Add(this.drawingSurface1);
 			this.Controls.Add(this.toolStrip1);
 			this.Name = "Form1";
 			this.Text = "Form1";
 			this.Load += new System.EventHandler(this.Form1_Load);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
+			this.boxContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -231,6 +266,10 @@
 		private DrawingSurface drawingSurface1;
 		private System.Windows.Forms.HScrollBar hScrollBar1;
 		private System.Windows.Forms.VScrollBar vScrollBar1;
+		private System.Windows.Forms.ContextMenuStrip boxContextMenu;
+		private System.Windows.Forms.ToolStripMenuItem freeze;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+		private System.Windows.Forms.ToolStripMenuItem boxSpecificOptionToolStripMenuItem;
 	}
 }
 

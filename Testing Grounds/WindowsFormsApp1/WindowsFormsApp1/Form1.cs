@@ -21,7 +21,7 @@ namespace WindowsFormsApp1
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
         {
-
+		
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -80,6 +80,10 @@ namespace WindowsFormsApp1
 			return c;
 		}
 
+		private void drawingSurface1_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 
 	public interface Item
@@ -88,6 +92,7 @@ namespace WindowsFormsApp1
         bool HitTest(Point p);
         void Draw(Graphics g);
         void Move(Point p);
+		ContextMenuStrip getContextMenu();
     }
 
 	public class Line : Item
@@ -204,6 +209,11 @@ namespace WindowsFormsApp1
 			*/
 		}
 
+		public ContextMenuStrip getContextMenu()
+		{
+			return new ContextMenuStrip();
+		}
+
 		public Point p1 { get; set; }
 		public Point p2 { get; set; }
 
@@ -230,7 +240,42 @@ namespace WindowsFormsApp1
 			text.Width = 50;
 
 			surface = d;
-        }
+
+			System.Windows.Forms.ToolStripMenuItem freeze = new ToolStripMenuItem();
+			System.Windows.Forms.ToolStripMenuItem connect = new ToolStripMenuItem();
+			System.Windows.Forms.ToolStripMenuItem boxSpecificOptionToolStripMenuItem = new ToolStripMenuItem();
+
+		contextMenu = new ContextMenuStrip();
+			// 
+			// boxContextMenu
+			// 
+			contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			freeze,
+			connect,
+			boxSpecificOptionToolStripMenuItem});
+
+			contextMenu.Name = "boxContextMenu";
+			contextMenu.Size = new System.Drawing.Size(178, 70);
+			// 
+			// freeze
+			// 
+			freeze.Name = "freeze";
+			freeze.Size = new System.Drawing.Size(177, 22);
+			freeze.Text = "Freeze";
+			// 
+			// toolStripMenuItem2
+			// 
+			connect.Name = "connect";
+			connect.Size = new System.Drawing.Size(177, 22);
+			connect.Text = "Connect";
+			// 
+			// boxSpecificOptionToolStripMenuItem
+			// 
+			boxSpecificOptionToolStripMenuItem.Name = "boxSpecificOptionToolStripMenuItem";
+			boxSpecificOptionToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+			boxSpecificOptionToolStripMenuItem.Text = "Box Specific Option";
+
+		}
         public int height { get; set; }
         public int width { get; set; }
         public Point TLCorner { get; set; } //Top Left Corner of box
@@ -239,6 +284,8 @@ namespace WindowsFormsApp1
 		public TextBox text;
 
 		private DrawingSurface surface;
+
+		public ContextMenuStrip contextMenu;
 
 		public GraphicsPath getPath()
         {
@@ -286,7 +333,7 @@ namespace WindowsFormsApp1
 				//text.BringToFront();
 
 
-			}
+				}
            // }
         }
 
@@ -299,23 +346,34 @@ namespace WindowsFormsApp1
 
 			text.Location = new Point(x, y);
 		}
-    }
+
+		public ContextMenuStrip getContextMenu()
+		{
+			return contextMenu;
+		}
+	}
 
     public class DrawingSurface : Control
     {
         public List<Item> Shapes { get; private set; }
+		//Shapes could be organized to minimize search times. For example: top to bottom. So when searching, if the top-left corner of shape being tested is 
+		//below the cursor position, we know that the cursor didn't touch anything.
         Item selectedShape;
         public bool moving { get; private set; }
 		Point previousPoint = Point.Empty;
+		public ContextMenuStrip contextMenu;
 
 		public DrawingSurface(){
 			DoubleBuffered = true;
 			Shapes = new List<Item>();
 			moving = false;
+			contextMenu = new ContextMenuStrip();
+			this.ContextMenuStrip = null;
 		}
 
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
+			
 			for(var i = Shapes.Count - 1; i >= 0; i--)
 			{
 				if (Shapes[i].HitTest(e.Location))
@@ -327,8 +385,16 @@ namespace WindowsFormsApp1
 
 			if(selectedShape != null)
 			{
-				moving = true;
-				previousPoint = e.Location;
+				if (e.Button == MouseButtons.Left)
+				{
+					moving = true;
+					previousPoint = e.Location;
+				}
+				else if(e.Button == MouseButtons.Right)
+				{
+					this.ContextMenuStrip = selectedShape.getContextMenu();
+					return;
+				}
 			}
 
 			base.OnMouseDown(e);
@@ -349,13 +415,21 @@ namespace WindowsFormsApp1
 
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
-			if(moving)
+			if (e.Button == MouseButtons.Left)
 			{
-				selectedShape = null;
-				moving = false;
-			}
+				if (moving)
+				{
+					selectedShape = null;
+					moving = false;
+				}
 
-			base.OnMouseUp(e);
+				base.OnMouseUp(e);
+			}
+			else if(e.Button == MouseButtons.Right)
+			{
+				base.OnMouseUp(e);
+				this.ContextMenuStrip = null;
+			}
 		}
 
 		protected override void OnPaint(PaintEventArgs e)
