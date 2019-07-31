@@ -15,6 +15,6 @@ namespace WindowsFormsApp1
 		bool HitTest(Point p);
 		void Draw(Graphics g);
 		void Move(Point p);
-		ContextMenuStrip getContextMenu();
+		ContextMenuStrip GetContextMenu();
 	}
 }

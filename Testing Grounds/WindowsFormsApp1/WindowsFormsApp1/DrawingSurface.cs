@@ -46,17 +46,21 @@ namespace WindowsFormsApp1
 			{
 				if (e.Button == MouseButtons.Left)
 				{
-					//Moving
+					if (takingAction)
+					{
+						takingAction = action.mouseDown(this, e);
+					}
+					else //if there is no ongoing action, then assume the user is wanting to move the selected shape.
+					{
+						takingAction = true;
+						action = new Moving();
 
-					takingAction = true;
-					action = new Moving();
-
-					action.mouseDown(this, e);
-					
+						action.mouseDown(this, e);
+					}
 				}
 				else if (e.Button == MouseButtons.Right)
 				{
-					this.ContextMenuStrip = selectedShape.getContextMenu();
+					this.ContextMenuStrip = selectedShape.GetContextMenu();
 					return;
 				}
 			}
