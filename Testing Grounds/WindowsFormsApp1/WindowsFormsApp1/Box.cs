@@ -48,55 +48,8 @@ namespace WindowsFormsApp1
 
 			default_anchor = null;
 
-			System.Windows.Forms.ToolStripMenuItem freeze = new ToolStripMenuItem();
-			System.Windows.Forms.ToolStripMenuItem connect = new ToolStripMenuItem();
-			System.Windows.Forms.ToolStripMenuItem boxSpecificOptionToolStripMenuItem = new ToolStripMenuItem();
+			contextMenu = d.boxMenu;
 
-			contextMenu = new ContextMenuStrip();
-			// 
-			// boxContextMenu
-			// 
-			contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			freeze,
-			connect,
-			boxSpecificOptionToolStripMenuItem});
-
-			contextMenu.Name = "boxContextMenu";
-			contextMenu.Size = new System.Drawing.Size(178, 70);
-			// 
-			// freeze
-			// 
-			freeze.Name = "freeze";
-			freeze.Size = new System.Drawing.Size(177, 22);
-			freeze.Text = "Freeze";
-			// 
-			// toolStripMenuItem2
-			// 
-			connect.Name = "connect";
-			connect.Size = new System.Drawing.Size(177, 22);
-			connect.Text = "Connect To ...";
-			//connect.Click += new System.EventHandler(surface.);
-
-			//TODO
-			/*
-			 * Find a way to make clicking the "Connect To ..." option in the context menu actually do something helpful. If we're going with my plan 
-			 * to have the user then click on the shape they want to connect to, then we'll need to communicate with DrawingSurface1. DrawingSurface1
-			 * should remember the selected shape (the one the user right-clicked on), so we'll need to tell it that the user is now trying to connect
-			 * that shape with an as-yet unknown other shape. Will need to implement the Action interface and replace the current system of boolean "moving"
-			 * variable and associated actions before doing this.
-			*/
-
-
-			
-			// 
-			// boxSpecificOptionToolStripMenuItem
-			// 
-			boxSpecificOptionToolStripMenuItem.Name = "boxSpecificOptionToolStripMenuItem";
-			boxSpecificOptionToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-			boxSpecificOptionToolStripMenuItem.Text = "Box Specific Option";
-			// 
-			// freeze
-			// 
 		}
 		
 
@@ -159,6 +112,26 @@ namespace WindowsFormsApp1
 			int y = TLCorner.Y + (height / 2) - (text.Height / 2);
 
 			text.Location = new Point(x, y);
+
+			foreach (Line l in top_anchor)
+			{
+				l.MoveEndpoint(this, get_top_anchor_position());
+			}
+
+			foreach (Line l in bottom_anchor)
+			{
+				l.MoveEndpoint(this, get_bottom_anchor_position());
+			}
+
+			foreach (Line l in left_anchor)
+			{
+				l.MoveEndpoint(this, get_left_anchor_position());
+			}
+
+			foreach (Line l in right_anchor)
+			{
+				l.MoveEndpoint(this, get_right_anchor_position());
+			}
 		}
 
 		public ContextMenuStrip GetContextMenu()
@@ -201,9 +174,11 @@ namespace WindowsFormsApp1
 		}
 		#endregion
 
-		public void Connect(ref Line line)
+		public void Connect(ref ConnectionLine line)
 		{
 			default_anchor = line;
+
+			line.Connect(this);
 
 			/*	How connecting works
 			 *	
@@ -251,8 +226,8 @@ namespace WindowsFormsApp1
 			 */
 
 			Point farEndPoint = default_anchor.GetEndPoint(this, false);
-
-			if (farEndPoint.Y >= TLCorner.Y) //eliminate the bottom anchor
+			
+			if (farEndPoint.Y <= TLCorner.Y) //eliminate the bottom anchor
 			{
 				float distanceT = Form1.distance(farEndPoint, get_top_anchor_position());
 
@@ -262,11 +237,14 @@ namespace WindowsFormsApp1
 
 					if(distanceT <= distanceL)
 					{
+						default_anchor.MoveEndpoint(this, get_top_anchor_position());
 						top_anchor.Add(default_anchor);
 						default_anchor = null;
+
 					}
 					else
 					{
+						default_anchor.MoveEndpoint(this, get_left_anchor_position());
 						left_anchor.Add(default_anchor);
 						default_anchor = null;
 					}
@@ -277,11 +255,13 @@ namespace WindowsFormsApp1
 
 					if (distanceT <= distanceR)
 					{
+						default_anchor.MoveEndpoint(this, get_top_anchor_position());
 						top_anchor.Add(default_anchor);
 						default_anchor = null;
 					}
 					else
 					{
+						default_anchor.MoveEndpoint(this, get_right_anchor_position());
 						right_anchor.Add(default_anchor);
 						default_anchor = null;
 					}
@@ -297,11 +277,13 @@ namespace WindowsFormsApp1
 
 					if (distanceB <= distanceL)
 					{
+						default_anchor.MoveEndpoint(this, get_bottom_anchor_position());
 						bottom_anchor.Add(default_anchor);
 						default_anchor = null;
 					}
 					else
 					{
+						default_anchor.MoveEndpoint(this, get_left_anchor_position());
 						left_anchor.Add(default_anchor);
 						default_anchor = null;
 					}
@@ -312,23 +294,123 @@ namespace WindowsFormsApp1
 
 					if (distanceB <= distanceR)
 					{
+						default_anchor.MoveEndpoint(this, get_bottom_anchor_position());
 						bottom_anchor.Add(default_anchor);
 						default_anchor = null;
 					}
 					else
 					{
+						default_anchor.MoveEndpoint(this, get_right_anchor_position());
 						right_anchor.Add(default_anchor);
 						default_anchor = null;
 					}
 				}
 			}
 
+
 			/*
+
 			float distanceT = Form1.distance(farEndPoint, get_top_anchor_position());
 			float distanceB = Form1.distance(farEndPoint, get_bottom_anchor_position());
 			float distanceL = Form1.distance(farEndPoint, get_left_anchor_position());
 			float distanceR = Form1.distance(farEndPoint, get_right_anchor_position());
+
+			if(distanceT <= distanceB)	//top or bottom?
+			{
+				if(distanceL <= distanceR) //left or right?
+				{
+					if(distanceT <= distanceL) //Top anchor has the shortest distance 
+					{
+						default_anchor.MoveEndpoint(this, get_top_anchor_position());
+						top_anchor.Add(default_anchor);
+						default_anchor = null;
+					}
+
+					else //left anchor
+					{
+						default_anchor.MoveEndpoint(this, get_left_anchor_position());
+						left_anchor.Add(default_anchor);
+						default_anchor = null;
+					}
+				}
+
+				else	//top or right?
+				{
+					if (distanceT <= distanceL) //Top anchor has the shortest distance 
+					{
+						default_anchor.MoveEndpoint(this, get_top_anchor_position());
+						top_anchor.Add(default_anchor);
+						default_anchor = null;
+					}
+
+					else //right anchor
+					{
+						default_anchor.MoveEndpoint(this, get_right_anchor_position());
+						right_anchor.Add(default_anchor);
+						default_anchor = null;
+					}
+				}
+			}
+			else
+			{
+				if (distanceL <= distanceR) //left or right?
+				{
+					if (distanceB <= distanceL) //bottom anchor has the shortest distance 
+					{
+						default_anchor.MoveEndpoint(this, get_bottom_anchor_position());
+						bottom_anchor.Add(default_anchor);
+						default_anchor = null;
+					}
+
+					else //left anchor
+					{
+						default_anchor.MoveEndpoint(this, get_left_anchor_position());
+						left_anchor.Add(default_anchor);
+						default_anchor = null;
+					}
+				}
+
+				else    //bottom or right?
+				{
+					if (distanceB <= distanceL) //bottom anchor has the shortest distance 
+					{
+						default_anchor.MoveEndpoint(this, get_bottom_anchor_position());
+						bottom_anchor.Add(default_anchor);
+						default_anchor = null;
+					}
+
+					else //right anchor
+					{
+						default_anchor.MoveEndpoint(this, get_right_anchor_position());
+						right_anchor.Add(default_anchor);
+						default_anchor = null;
+					}
+				}
+			}
+
 			*/
+			
+		}
+
+		public bool handleConnection(Box b)
+		{
+			if(this == b)
+			{
+				return false;
+			}
+
+			ConnectionLine line = new ConnectionLine(TLCorner, b.TLCorner, ref surface);
+
+			surface.Shapes.Add(line);
+
+			Connect(ref line);
+
+			b.Connect(ref line);
+
+			FinishConnection();
+			b.FinishConnection();
+
+			return true;
 		}
 	}
 }

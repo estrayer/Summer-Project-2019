@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Box.cs" />
     <Compile Include="Connecting.cs" />
+    <Compile Include="ConnectionLine.cs" />
     <Compile Include="DrawingSurface.cs">
       <SubType>Component</SubType>
     </Compile>

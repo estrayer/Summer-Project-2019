@@ -20,6 +20,8 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
 			form = this;
+
+			drawingSurface1.boxMenu = boxContextMenu;
         }
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
@@ -88,9 +90,18 @@ namespace WindowsFormsApp1
 
 		}
 
-		private void connectTo(object sender, EventArgs e)
+		public void connectTo(object sender, EventArgs e)
 		{
-			
+			//if (!drawingSurface1.takingAction)
+			//{
+				Connecting action = new Connecting();
+				action.startConnection(drawingSurface1, (Box)drawingSurface1.selectedShape);
+
+				drawingSurface1.action = action;
+				drawingSurface1.takingAction = true;
+
+				
+			//}
 		}
 	}
 }

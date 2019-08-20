@@ -16,5 +16,6 @@ namespace WindowsFormsApp1
 		void Draw(Graphics g);
 		void Move(Point p);
 		ContextMenuStrip GetContextMenu();
+		bool handleConnection(Box b);
 	}
 }

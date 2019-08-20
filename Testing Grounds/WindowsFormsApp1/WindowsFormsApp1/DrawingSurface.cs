@@ -11,14 +11,17 @@ namespace WindowsFormsApp1
 	public class DrawingSurface : Control
 	{
 
+		
+
 		public List<Item> Shapes { get; private set; }
 		//Shapes could be organized to minimize search times. For example: top to bottom. So when searching, if the top-left corner of shape being tested is 
 		//below the cursor position, we know that the cursor didn't touch anything.
 		public Item selectedShape;
-		public bool takingAction { get; private set; }
+		public bool takingAction { get; set; }
 		public Action action;
 		Point previousPoint = Point.Empty;
 		public ContextMenuStrip contextMenu;
+		public ContextMenuStrip boxMenu;
 
 		public DrawingSurface()
 		{

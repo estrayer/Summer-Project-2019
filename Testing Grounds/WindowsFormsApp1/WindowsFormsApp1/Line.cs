@@ -61,7 +61,7 @@ namespace WindowsFormsApp1
 			return path;
 		}
 
-		public bool HitTest(Point p)
+		public virtual bool HitTest(Point p)
 		{
 			var result = false;
 			using (var path = getPath())
@@ -156,7 +156,7 @@ namespace WindowsFormsApp1
 			return new ContextMenuStrip();
 		}
 
-		public bool Connect(ref Box box)
+		public bool Connect(Box box)
 		{
 			if(item1 == null)
 			{
@@ -230,19 +230,37 @@ namespace WindowsFormsApp1
 
 			if (box.TLCorner == item1.TLCorner)
 			{
-				return p1;
+				if (near == true)
+				{
+					return p1;
+				}
+				else
+				{
+					return p2;
+				}
 
 			}
 			else if (box.TLCorner == item2.TLCorner)
 			{
-				return p2;
-
+				if (near == true)
+				{
+					return p2;
+				}
+				else
+				{
+					return p1;
+				}
 			}
 
 			else
 			{
 				throw new ConnectionErrorException("Line isn't connected to specified Box");
 			}
+		}
+
+		public bool handleConnection(Box b)
+		{
+			return false;
 		}
 
 	}

@@ -182,7 +182,7 @@
             this.connect,
             this.boxSpecificOption});
 			this.boxContextMenu.Name = "boxContextMenu";
-			this.boxContextMenu.Size = new System.Drawing.Size(181, 92);
+			this.boxContextMenu.Size = new System.Drawing.Size(178, 70);
 			// 
 			// freezeBox
 			// 
@@ -193,7 +193,7 @@
 			// connect
 			// 
 			this.connect.Name = "connect";
-			this.connect.Size = new System.Drawing.Size(180, 22);
+			this.connect.Size = new System.Drawing.Size(177, 22);
 			this.connect.Text = "Connect To ...";
 			this.connect.Click += new System.EventHandler(this.connectTo);
 			// 
@@ -222,11 +222,13 @@
 			// drawingSurface1
 			// 
 			this.drawingSurface1.BackColor = System.Drawing.SystemColors.HotTrack;
+			this.drawingSurface1.ContextMenuStrip = this.boxContextMenu;
 			this.drawingSurface1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.drawingSurface1.Location = new System.Drawing.Point(0, 25);
 			this.drawingSurface1.Name = "drawingSurface1";
 			this.drawingSurface1.Size = new System.Drawing.Size(1412, 427);
 			this.drawingSurface1.TabIndex = 2;
+			this.drawingSurface1.takingAction = false;
 			this.drawingSurface1.Text = "drawingSurface1";
 			this.drawingSurface1.Click += new System.EventHandler(this.drawingSurface1_Click);
 			// 

@@ -20,5 +20,7 @@ namespace WindowsFormsApp1
 		public abstract bool HitTest(Point p);
 
 		public abstract void Move(Point p);
+
+		public abstract bool handleConnection(Box b);
 	}
 }
